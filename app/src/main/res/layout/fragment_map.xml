@@ -1,0 +1,53 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFDDAA"
+    tools:context="com.example.m05368.eatwhat.SlotFragment">
+
+    <ImageView
+        android:id="@+id/map"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:src="@drawable/map"/>
+
+<FrameLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/food"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="老吳魯肉飯"
+        android:textColor="#8B4513"
+        android:textSize="30dp"
+        android:layout_marginLeft="105dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="飯類    50元"
+        android:textSize="20dp"
+        android:layout_marginLeft="105dp"
+        android:layout_marginTop="40dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="台北市信義區饒河街100號"
+        android:textSize="20dp"
+        android:layout_marginLeft="105dp"
+        android:layout_marginTop="65dp"/>
+</FrameLayout>
+
+
+
+
+</LinearLayout>

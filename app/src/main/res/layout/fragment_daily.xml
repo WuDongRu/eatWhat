@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.m05368.eatwhat.SlotFragment"
+    android:background="#FFDDAA"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="月份"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:background="#ffffff"
+        android:clickable="true"/>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_daily"
+        android:layout_below="@+id/hello2" >
+
+    </ListView>
+
+</LinearLayout>

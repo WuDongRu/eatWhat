@@ -1,0 +1,143 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFDDAA">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        <TextView
+            android:id="@+id/daily"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="美食日誌"
+            android:textColor="#ffffff"
+            android:gravity="center_horizontal"
+            android:textSize="20dp"/>
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/text_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="日期:"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1990/01/01"
+            android:textSize="20dp"
+            android:layout_marginLeft="55dp"/>
+
+        <TextView
+            android:id="@+id/text_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="店名:"
+            android:textSize="20dp"
+            android:layout_marginTop="35dp"/>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="老吳魯肉飯"
+            android:textSize="20dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginLeft="55dp" />
+
+        <TextView
+            android:id="@+id/text_meal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="餐點:"
+            android:textSize="20dp"
+            android:layout_marginTop="70dp"/>
+
+        <EditText
+            android:id="@+id/meal"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:layout_marginTop="73dp"
+            android:layout_marginLeft="55dp"
+            android:text=""/>
+
+        <TextView
+            android:id="@+id/text_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="價格:"
+            android:textSize="20dp"
+            android:layout_marginTop="105dp" />
+
+        <EditText
+            android:id="@+id/price"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:layout_marginTop="108dp"
+            android:layout_marginLeft="55dp"
+            android:text=""/>
+
+        <TextView
+            android:id="@+id/text_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="評價:"
+            android:textSize="20dp"
+            android:layout_marginTop="140dp" />
+
+        <Spinner
+            android:id="@+id/score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="143dp"
+            android:layout_marginLeft="55dp"
+            android:entries="@array/score_array">
+
+        </Spinner>
+
+
+        <TextView
+            android:id="@+id/text_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="描述:"
+            android:textSize="20dp"
+            android:layout_marginTop="175dp"/>
+
+        <EditText
+            android:id="@+id/content"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            android:background="#ffffff"
+            android:layout_marginTop="178dp"
+            android:layout_marginLeft="55dp"
+            android:gravity="top"
+            android:text=""/>
+
+
+    </FrameLayout>
+
+
+</LinearLayout>

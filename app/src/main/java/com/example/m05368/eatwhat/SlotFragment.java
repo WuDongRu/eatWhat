@@ -1,6 +1,8 @@
 package com.example.m05368.eatwhat;
 
-
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,12 +13,11 @@ import android.widget.NumberPicker;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Random;
 
-public class OneFragment extends Fragment{
+public class SlotFragment extends Fragment{
 
 
-    public OneFragment() {
+    public SlotFragment() {
         // Required empty public constructor
     }
 
@@ -27,13 +28,13 @@ public class OneFragment extends Fragment{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_one, container, false);
-        Button btn1 = (Button) rootView.findViewById(R.id.btn1);
-        final NumberPicker picker = (NumberPicker) rootView.findViewById(R.id.picker);
-        final String[] values = {"AAAAA", "BBBBB", "CCCCC", "DDDDD", "EEEEE", "FFFFF"};
+        View view = inflater.inflate(R.layout.fragment_slot, container, false);
+        final NumberPicker picker = (NumberPicker) view.findViewById(R.id.picker);
+        Button slot_btn = (Button) view.findViewById(R.id.slot_btn);
+        final String[] values = {"魯肉飯", "豬排飯", "拉麵", "鍋貼", "炒飯", "鍋燒麵"};
         //Populate NumberPicker values from String array values
         //Set the minimum value of NumberPicker
         picker.setMinValue(0); //from array first value
@@ -43,18 +44,37 @@ public class OneFragment extends Fragment{
         picker.setDisplayedValues(values);
         //Gets whether the selector wheel wraps when reaching the min/max value.
         picker.setWrapSelectorWheel(true);
-        btn1.setOnClickListener(new View.OnClickListener() {
+        slot_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 changeValueByOne(picker, true);
+
+                View slot_dialog = inflater.inflate(R.layout.slot_dialog, null );
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setView(slot_dialog);
+                builder.setPositiveButton("Let's GO!", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked OK button
+                    }
+                });
+                builder.setNegativeButton("在思考一下...", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+                //button style
+                Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
+                pbutton.setTextColor(Color.parseColor("#00BFFF"));
+                pbutton.setTextSize(16);
+                Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
+                nbutton.setTextColor(Color.parseColor("#00BFFF"));
                 }
         });
-        return rootView;
 
+        return view;
     }
-
-
-
 
     private void changeValueByOne(final NumberPicker picker, final boolean increment) {
 

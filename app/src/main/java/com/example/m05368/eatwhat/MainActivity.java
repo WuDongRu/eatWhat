@@ -38,10 +38,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new OneFragment(), "拉霸");
-        adapter.addFragment(new TwoFragment(), "美食地圖");
-        adapter.addFragment(new ThreeFragment(), "美食日誌");
-        adapter.addFragment(new FourFragment(), "我的最愛");
+        adapter.addFragment(new SlotFragment(), "拉霸");
+        adapter.addFragment(new MapFragment(), "美食地圖");
+        adapter.addFragment(new DailyFragment(), "美食日誌");
+        adapter.addFragment(new FavoriteFragment(), "我的最愛");
         viewPager.setAdapter(adapter);
     }
 
