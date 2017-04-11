@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/month"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="月份"
@@ -17,9 +18,9 @@
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="480dp"
         android:id="@+id/list_daily"
-        android:layout_below="@+id/hello2" >
+        android:layout_below="@+id/month">
 
     </ListView>
 

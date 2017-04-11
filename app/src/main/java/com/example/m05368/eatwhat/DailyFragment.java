@@ -1,5 +1,6 @@
 package com.example.m05368.eatwhat;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,11 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +28,9 @@ import static com.example.m05368.eatwhat.R.layout.fragment_daily;
 public class DailyFragment extends Fragment{
 
     private ListView list_daily;
+    private TextView month;
     private List<Map<String, Object>> data;
+    private DatePickerDialog datePickerDialog;
 
     public DailyFragment() {
         // Required empty public constructor
@@ -40,6 +46,8 @@ public class DailyFragment extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(fragment_daily, container, false);
+        final GregorianCalendar calendar = new GregorianCalendar();
+
 
         data = getData();
 
@@ -53,6 +61,23 @@ public class DailyFragment extends Fragment{
                 startActivity(intent);
             }
         });
+
+
+        month = (TextView) view.findViewById(R.id.month);
+        month.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+                    }
+                },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DATE));
+            datePickerDialog.show();
+
+            }
+        });
+
 
         return view;
     }
