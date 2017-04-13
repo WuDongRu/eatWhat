@@ -3,6 +3,7 @@ package com.example.m05368.eatwhat;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ public class DailyFragment extends Fragment{
     private List<Map<String, Object>> data;
     private DatePickerDialog datePickerDialog;
 
+
     public DailyFragment() {
         // Required empty public constructor
     }
@@ -48,13 +50,11 @@ public class DailyFragment extends Fragment{
         View view = inflater.inflate(fragment_daily, container, false);
         final GregorianCalendar calendar = new GregorianCalendar();
 
-
         data = getData();
+
 
         list_daily = (ListView) view.findViewById(R.id.list_daily);
         list_daily.setAdapter(new MyAdapter(getActivity().getApplicationContext()));
-
-
         list_daily.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {//
                 Intent intent = new Intent(getActivity(), DailyDetail.class);
@@ -70,11 +70,9 @@ public class DailyFragment extends Fragment{
                 datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
                     }
                 },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DATE));
-            datePickerDialog.show();
-
+             datePickerDialog.show();
             }
         });
 
