@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.m05368.eatwhat.SlotFragment"
+    tools:context="com.example.m05368.eatwhat.Fragment.SlotFragment"
     android:background="#FFDDAA">
 
 
@@ -103,7 +103,7 @@
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="10"
+            android:text="5"
             android:textSize="30dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"/>

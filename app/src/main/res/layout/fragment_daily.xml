@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.m05368.eatwhat.SlotFragment"
+    tools:context="com.example.m05368.eatwhat.Fragment.SlotFragment"
     android:background="#FFDDAA"
     android:orientation="vertical">
 

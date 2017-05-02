@@ -10,6 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 
+import com.example.m05368.eatwhat.Fragment.DailyFragment;
+import com.example.m05368.eatwhat.Fragment.FavoriteFragment;
+import com.example.m05368.eatwhat.Fragment.MapFragment;
+import com.example.m05368.eatwhat.Fragment.SlotFragment;
+
 import java.util.ArrayList;
 import java.util.List;
 

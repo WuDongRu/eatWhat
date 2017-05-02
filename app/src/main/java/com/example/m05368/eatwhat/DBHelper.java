@@ -16,15 +16,19 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private final static String RESTAURANT_TABLE = "restaurantGet";
     private final static String _ID = "_id";
-    private final static String RG_NAME = " rG_name";
-    private final static String RG_ADDRESS = " rG_address";
+    private final static String S_NAME = " S_name";
+    private final static String S_ADDRESS = " S_address";
+    private final static String S_LONGITUDE = " S_longitude";
+    private final static String S_LATITUDE = " S_latitude";
 
 
     private String sqlstore =
             "CREATE TABLE IF NOT EXISTS "+RESTAURANT_TABLE+"("+
                     _ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
-                    RG_NAME+" CHAR,"+
-                    RG_ADDRESS+" CHAR"+
+                    S_NAME+" CHAR,"+
+                    S_ADDRESS+" CHAR,"+
+                    S_LONGITUDE+" CHAR,"+
+                    S_LATITUDE+" CHAR"+
                     ")";
 
 
@@ -39,21 +43,25 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(sqlstore);
 
-        db.execSQL("insert into restaurantGet values (20,'老吳魯肉飯','台北市信義區饒河街')");
-
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        database.execSQL("DROP TABLE IF EXISTS"+RESTAURANT_TABLE);
         onCreate(db);
     }
 
+    public void deleteAll(){
+        database.delete("restaurantGet",null, null);
+    }
 
-    public void addrestaurant(int _id , String rG_name , String rG_address){
+    public void addrestaurant(int _id , String S_name , String S_address , String S_longitude, String S_latitude){
         ContentValues values = new ContentValues();
         values.put("_id", _id);
-        values.put("rG_name", rG_name);
-        values.put("rG_address", rG_address);
+        values.put("S_name", S_name);
+        values.put("S_address", S_address);
+        values.put("S_longitude", S_longitude);
+        values.put("S_latitude", S_latitude);
         database.insert("restaurantGet", null, values);
     }
 
