@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     tools:context="com.example.m05368.eatwhat.Fragment.SlotFragment"
     android:background="#FFDDAA"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="50dp">
 
 
     <ListView

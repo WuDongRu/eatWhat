@@ -16,12 +16,17 @@ public class JsonData {
     @SerializedName("S_address")
     private String S_address;
 
+    @SerializedName("S_price")
+    private String S_price;
+
     @SerializedName("S__longitude")
     private String S__longitude;
 
     @SerializedName("S_latitude")
     private String S_latitude;
 
+    @SerializedName("T_name")
+    private String T_name;
 
 
     public int getS_id() {
@@ -38,6 +43,14 @@ public class JsonData {
 
     public void setS_name(){
         this.S_name = S_name;
+    }
+
+    public String getS_price() {
+        return S_price;
+    }
+
+    public void setS_price(){
+        this.S_price = S_price;
     }
 
     public String getS_address() {
@@ -62,5 +75,13 @@ public class JsonData {
 
     public void setS_latitude(){
         this.S_latitude = S_latitude;
+    }
+
+    public String getT_name() {
+        return T_name;
+    }
+
+    public void setT_name(){
+        this.T_name = T_name;
     }
 }

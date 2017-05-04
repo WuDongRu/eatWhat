@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     tools:context="com.example.m05368.eatwhat.Fragment.SlotFragment"
     android:background="#FFDDAA"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="50dp">
 
     <TextView
         android:id="@+id/month"
@@ -18,7 +19,7 @@
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="480dp"
+        android:layout_height="match_parent"
         android:id="@+id/list_daily"
         android:layout_below="@+id/month">
 

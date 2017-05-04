@@ -83,4 +83,9 @@ public class MainActivity extends AppCompatActivity {
             return mFragmentTitleList.get(position);
         }
     }
+
+    public void navigateFragment(int position){
+        viewPager.setCurrentItem(position, true);
+
+    }
 }

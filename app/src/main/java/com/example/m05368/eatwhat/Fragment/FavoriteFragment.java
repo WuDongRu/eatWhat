@@ -2,6 +2,8 @@ package com.example.m05368.eatwhat.Fragment;
 
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.m05368.eatwhat.DBHelper;
 import com.example.m05368.eatwhat.R;
 
 import java.util.ArrayList;
@@ -55,14 +58,21 @@ public class FavoriteFragment extends Fragment{
     {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         Map<String, Object> map;
-        for(int i=0;i<10;i++)
+        SQLiteDatabase db = getActivity().openOrCreateDatabase("eatWhat_database", android.content.Context.MODE_PRIVATE, null);
+        Cursor c=db.query("restaurantGet",null,null,null,null,null,null);
+        DBHelper helper = new DBHelper(getActivity().getApplicationContext());
+
+        for(int i=0;i<c.getCount();i++)
         {
+            c.moveToPosition(i);
             map = new HashMap<String, Object>();
             map.put("img", R.drawable.food);
-            map.put("name", "店名");
-            map.put("address", "地址");
+            map.put("name", c.getString(1));
+            map.put("address", c.getString(2));
             list.add(map);
         }
+        db.close();
+        helper.close();
         return list;
     }
 

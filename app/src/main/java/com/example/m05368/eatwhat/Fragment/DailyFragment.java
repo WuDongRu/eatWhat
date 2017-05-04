@@ -3,6 +3,9 @@ package com.example.m05368.eatwhat.Fragment;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,9 +18,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.m05368.eatwhat.DBHelper;
 import com.example.m05368.eatwhat.DailyDetail;
 import com.example.m05368.eatwhat.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -66,6 +71,10 @@ public class DailyFragment extends Fragment{
 
 
         month = (TextView) view.findViewById(R.id.month);
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM");
+        String date=sdf.format(new java.util.Date());
+        month.setText(date);
+
         month.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,20 +96,28 @@ public class DailyFragment extends Fragment{
     {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         Map<String, Object> map;
-        for(int i=0;i<10;i++)
+        SQLiteDatabase db = getActivity().openOrCreateDatabase("eatWhat_database", android.content.Context.MODE_PRIVATE, null);
+        Cursor c=db.query("restaurantGet",null,null,null,null,null,null);
+        DBHelper helper = new DBHelper(getActivity().getApplicationContext());
+
+        for(int i=0;i<c.getCount();i++)
         {
+            c.moveToPosition(i);
             map = new HashMap<String, Object>();
+            map.put("date", String.valueOf(i+1));
             map.put("img", R.drawable.food);
-            map.put("name", "店名");
-            map.put("address", "地址");
+            map.put("name", c.getString(1));
+            map.put("address", c.getString(2));
             list.add(map);
         }
+        db.close();
+        helper.close();
         return list;
     }
 
     static class ViewHolder {
         ImageView imageView;
-        TextView name,address;
+        TextView date,name,address;
     }
 
     public class MyAdapter extends BaseAdapter {
@@ -135,6 +152,7 @@ public class DailyFragment extends Fragment{
             if (view == null) {
                 view = layoutInflater.inflate(R.layout.daily_item, null);
                 viewHolder = new ViewHolder();
+                viewHolder.date = (TextView) view.findViewById(R.id.date);
                 viewHolder.imageView = (ImageView) view.findViewById(R.id.food);
                 viewHolder.name = (TextView) view.findViewById(R.id.name);
                 viewHolder.address = (TextView) view.findViewById(R.id.address);
@@ -142,6 +160,7 @@ public class DailyFragment extends Fragment{
             } else {
                 viewHolder = (ViewHolder) view.getTag();
             }
+            viewHolder.date.setText((String)data.get(position).get("date"));
             viewHolder.imageView.setImageResource((Integer) data.get(position).get("img"));
             viewHolder.name.setText((String)data.get(position).get("name"));
             viewHolder.address.setText((String)data.get(position).get("address"));
