@@ -27,7 +27,7 @@ import static com.example.m05368.eatwhat.R.layout.fragment_favorite;
 
 public class FavoriteFragment extends Fragment{
 
-    private ListView list_daily;
+    private ListView list_favorite;
     private List<Map<String, Object>> data;
 
     public FavoriteFragment() {
@@ -48,8 +48,8 @@ public class FavoriteFragment extends Fragment{
 
         data = getData();
 
-        list_daily = (ListView) view.findViewById(R.id.list_daily);
-        list_daily.setAdapter(new FavoriteFragment.MyAdapter(getActivity().getApplicationContext()));
+        list_favorite = (ListView) view.findViewById(R.id.list_favorite);
+        list_favorite.setAdapter(new FavoriteFragment.MyAdapter(getActivity().getApplicationContext()));
 
 
         return view;
@@ -59,16 +59,15 @@ public class FavoriteFragment extends Fragment{
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         Map<String, Object> map;
         SQLiteDatabase db = getActivity().openOrCreateDatabase("eatWhat_database", android.content.Context.MODE_PRIVATE, null);
-        Cursor c=db.query("restaurantGet",null,null,null,null,null,null);
+        Cursor c=db.rawQuery("SELECT * FROM diary WHERE D_score = "+0,null);
         DBHelper helper = new DBHelper(getActivity().getApplicationContext());
-
         for(int i=0;i<c.getCount();i++)
         {
             c.moveToPosition(i);
             map = new HashMap<String, Object>();
             map.put("img", R.drawable.food);
-            map.put("name", c.getString(1));
-            map.put("address", c.getString(2));
+            map.put("name", c.getString(4));
+            map.put("address", "來店次數:"+1);
             list.add(map);
         }
         db.close();

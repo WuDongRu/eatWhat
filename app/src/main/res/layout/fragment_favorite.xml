@@ -11,8 +11,7 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="500dp"
-        android:id="@+id/list_daily"
-        android:layout_below="@+id/month">
+        android:id="@+id/list_favorite">
 
     </ListView>
 

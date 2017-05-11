@@ -2,6 +2,8 @@ package com.example.m05368.eatwhat;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by M05368 on 2017/4/19.
  */
@@ -26,7 +28,19 @@ public class JsonData {
     private String S_latitude;
 
     @SerializedName("T_name")
-    private String T_name;
+    private List T_name;
+
+    @SerializedName("S_phone")
+    private String S_phone;
+
+    @SerializedName("S_opentime")
+    private String S_opentime;
+
+    @SerializedName("S_closetime")
+    private String S_closetime;
+
+    @SerializedName("P_photes")
+    private List P_photes;
 
 
     public int getS_id() {
@@ -77,11 +91,43 @@ public class JsonData {
         this.S_latitude = S_latitude;
     }
 
-    public String getT_name() {
+    public List getT_name() {
         return T_name;
     }
 
     public void setT_name(){
         this.T_name = T_name;
+    }
+
+    public String getS_phone() {
+        return S_phone;
+    }
+
+    public void setS_phone(){
+        this.S_phone = S_phone;
+    }
+
+    public void setS_opentime(){
+        this.S_opentime = S_opentime;
+    }
+
+    public String getS_opentime() {
+        return S_opentime;
+    }
+
+    public void setS_closetime(){
+        this.S_closetime = S_closetime;
+    }
+
+    public String getS_closetime() {
+        return S_closetime;
+    }
+
+    public List getP_photes() {
+        return P_photes;
+    }
+
+    public void setP_photes(){
+        this.P_photes = P_photes;
     }
 }

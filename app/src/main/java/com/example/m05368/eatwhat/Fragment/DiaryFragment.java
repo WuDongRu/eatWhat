@@ -3,7 +3,6 @@ package com.example.m05368.eatwhat.Fragment;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -19,7 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.m05368.eatwhat.DBHelper;
-import com.example.m05368.eatwhat.DailyDetail;
+import com.example.m05368.eatwhat.DiaryDetail;
 import com.example.m05368.eatwhat.R;
 
 import java.text.SimpleDateFormat;
@@ -33,7 +32,7 @@ import java.util.Map;
 import static com.example.m05368.eatwhat.R.layout.fragment_daily;
 
 
-public class DailyFragment extends Fragment{
+public class DiaryFragment extends Fragment{
 
     private ListView list_daily;
     private TextView month;
@@ -41,7 +40,7 @@ public class DailyFragment extends Fragment{
     private DatePickerDialog datePickerDialog;
 
 
-    public DailyFragment() {
+    public DiaryFragment() {
         // Required empty public constructor
     }
 
@@ -64,14 +63,15 @@ public class DailyFragment extends Fragment{
         list_daily.setAdapter(new MyAdapter(getActivity().getApplicationContext()));
         list_daily.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {//
-                Intent intent = new Intent(getActivity(), DailyDetail.class);
+                Intent intent = new Intent(getActivity(), DiaryDetail.class);
+                intent.putExtra("id",(Integer) data.get(position).get("id"));
                 startActivity(intent);
             }
         });
 
 
         month = (TextView) view.findViewById(R.id.month);
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy/MM");
         String date=sdf.format(new java.util.Date());
         month.setText(date);
 
@@ -97,17 +97,18 @@ public class DailyFragment extends Fragment{
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         Map<String, Object> map;
         SQLiteDatabase db = getActivity().openOrCreateDatabase("eatWhat_database", android.content.Context.MODE_PRIVATE, null);
-        Cursor c=db.query("restaurantGet",null,null,null,null,null,null);
+        Cursor c=db.query("diary",null,null,null,null,null,null);
         DBHelper helper = new DBHelper(getActivity().getApplicationContext());
 
         for(int i=0;i<c.getCount();i++)
         {
             c.moveToPosition(i);
             map = new HashMap<String, Object>();
-            map.put("date", String.valueOf(i+1));
+            map.put("id", c.getInt(0));
+            map.put("date", c.getString(3));
             map.put("img", R.drawable.food);
-            map.put("name", c.getString(1));
-            map.put("address", c.getString(2));
+            map.put("name", c.getString(4));
+            map.put("address", c.getString(5));
             list.add(map);
         }
         db.close();
@@ -150,7 +151,7 @@ public class DailyFragment extends Fragment{
         {
             ViewHolder viewHolder;
             if (view == null) {
-                view = layoutInflater.inflate(R.layout.daily_item, null);
+                view = layoutInflater.inflate(R.layout.diary_item, null);
                 viewHolder = new ViewHolder();
                 viewHolder.date = (TextView) view.findViewById(R.id.date);
                 viewHolder.imageView = (ImageView) view.findViewById(R.id.food);

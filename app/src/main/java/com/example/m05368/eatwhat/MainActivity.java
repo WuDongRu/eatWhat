@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 
-import com.example.m05368.eatwhat.Fragment.DailyFragment;
+import com.example.m05368.eatwhat.Fragment.DiaryFragment;
 import com.example.m05368.eatwhat.Fragment.FavoriteFragment;
 import com.example.m05368.eatwhat.Fragment.MapFragment;
 import com.example.m05368.eatwhat.Fragment.SlotFragment;
@@ -43,14 +43,13 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new SlotFragment(), "拉霸");
         adapter.addFragment(new MapFragment(), "美食地圖");
-        adapter.addFragment(new DailyFragment(), "美食日誌");
+        adapter.addFragment(new DiaryFragment(), "美食日誌");
         adapter.addFragment(new FavoriteFragment(), "我的最愛");
         viewPager.setAdapter(adapter);
     }

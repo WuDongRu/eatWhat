@@ -10,21 +10,16 @@
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
         <TextView
             android:id="@+id/daily"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="美食日誌"
+            android:layout_height="50dp"
+            android:text="美 食 日 誌"
             android:textColor="#ffffff"
-            android:gravity="center_horizontal"
-            android:textSize="20dp"/>
+            android:gravity="center"
+            android:textSize="25dp"/>
+
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
@@ -113,24 +108,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="143dp"
-            android:layout_marginLeft="55dp"
-            android:entries="@array/score_array">
+            android:layout_marginLeft="55dp">
 
         </Spinner>
 
 
         <TextView
-            android:id="@+id/text_content"
+            android:id="@+id/text_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="描述:"
+            android:text="評論:"
             android:textSize="20dp"
             android:layout_marginTop="175dp"/>
 
         <EditText
-            android:id="@+id/content"
+            android:id="@+id/comment"
             android:layout_width="300dp"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:background="#ffffff"
             android:layout_marginTop="178dp"
             android:layout_marginLeft="55dp"
@@ -151,7 +145,7 @@
             android:text="相機" />
 
         <Button
-            android:id="@+id/btn_album"
+            android:id="@+id/btn_gallery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="100dp"
@@ -159,13 +153,21 @@
 
         <ImageView
             android:id="@+id/image"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_below="@id/btn_camera"
             android:layout_centerInParent="true"
             android:src="@drawable/food"
             android:scaleType="centerCrop"
             />
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="儲存"
+            android:layout_toRightOf="@+id/image"
+            android:layout_alignParentBottom="true"/>
 
     </RelativeLayout>
 

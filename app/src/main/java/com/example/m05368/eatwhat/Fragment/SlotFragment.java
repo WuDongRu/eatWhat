@@ -8,8 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +18,13 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.example.m05368.eatwhat.DBHelper;
-import com.example.m05368.eatwhat.MainActivity;
 import com.example.m05368.eatwhat.R;
+import com.example.m05368.eatwhat.SlotRestaurant;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+
 
 
 public class SlotFragment extends Fragment{
@@ -50,8 +52,8 @@ public class SlotFragment extends Fragment{
 
 
         SQLiteDatabase db = getActivity().openOrCreateDatabase("eatWhat_database", android.content.Context.MODE_PRIVATE, null);
-        Cursor c=db.query("slot",null,null,null,null,null,null);
         DBHelper helper = new DBHelper(getActivity().getApplicationContext());
+        Cursor c=db.query("slot",null,null,null,null,null,null);
         final String[] str = new String [c.getCount()] ;
         for(int i = 0 ; i < c.getCount() ; i++) {
         c.moveToPosition(i);
@@ -65,41 +67,77 @@ public class SlotFragment extends Fragment{
         picker.setMaxValue(str.length - 1);
         picker.setDisplayedValues(str);
         picker.setWrapSelectorWheel(true);
+
         slot_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 slot_btn.setEnabled(false);
-                int num1,picker_position;
-                num1= (int)(Math.random()*100)+1;
-                picker_position = num1 % str.length;
-                Log.i("tag",str[picker_position]);
-                for (int i =0 ; i<num1 ; i++) {
+                final int picker_position;
+                picker_position= (int)(Math.random()*str.length);
+                for (int i =0 ; i<picker_position ; i++) {
                     changeValueByOne(picker, true);
                 }
 
-                View slot_dialog = inflater.inflate(R.layout.slot_dialog, null );
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setView(slot_dialog);
-                TextView name = (TextView) slot_dialog.findViewById(R.id.name);
-                name.setText(str[picker_position]);
-                builder.setPositiveButton("Let's GO!", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        ((MainActivity)getActivity()).navigateFragment(1);
+                picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+
+                    @Override
+                    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                        picker.setValue(picker_position);
                     }
+
                 });
-                builder.setNegativeButton("在思考一下...", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        View slot_dialog = inflater.inflate(R.layout.slot_dialog, null );
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setView(slot_dialog);
+                        final TextView name = (TextView) slot_dialog.findViewById(R.id.name);
+                        name.setText(str[picker_position]);
+                        builder.setPositiveButton("Let's GO!", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                SQLiteDatabase db = getActivity().openOrCreateDatabase("eatWhat_database", android.content.Context.MODE_PRIVATE, null);
+                                DBHelper helper = new DBHelper(getActivity().getApplicationContext());
+
+                                Intent intent = new Intent(getActivity(), SlotRestaurant.class);
+                                intent.putExtra("name",str[picker_position]);
+                                startActivity(intent);
+
+                                Cursor c=db.rawQuery("SELECT * FROM restaurantGet WHERE S_name = ?",new String[]{str[picker_position]});
+                                c.moveToFirst();
+
+                                SimpleDateFormat sdfy=new SimpleDateFormat("yyyy");
+                                String year=sdfy.format(new java.util.Date());
+                                SimpleDateFormat sdfm=new SimpleDateFormat("MM");
+                                String month=sdfm.format(new java.util.Date());
+                                SimpleDateFormat sdfd=new SimpleDateFormat("dd");
+                                String day=sdfd.format(new java.util.Date());
+                                helper.addtodiary(year,month,day,str[picker_position],c.getString(2));
+
+                                db.close();
+                                helper.close();
+                            }
+                        });
+                        builder.setNegativeButton("在思考一下...", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User cancelled the dialog
+                            }
+                        });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                        //button style
+                        Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
+                        pbutton.setTextColor(Color.parseColor("#00BFFF"));
+                        pbutton.setTextSize(16);
+                        Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
+                        nbutton.setTextColor(Color.parseColor("#00BFFF"));
+
                     }
-                });
-                AlertDialog alert = builder.create();
-                alert.show();
-                //button style
-                Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
-                pbutton.setTextColor(Color.parseColor("#00BFFF"));
-                pbutton.setTextSize(16);
-                Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
-                nbutton.setTextColor(Color.parseColor("#00BFFF"));
+                }, 500);
+
+
 
                 new CountDownTimer(5000, 1000) {
 

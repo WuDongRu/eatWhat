@@ -9,11 +9,9 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -101,14 +99,11 @@ public class WelcomeActivity extends AppCompatActivity {
                             sb.append("name:");
                             sb.append(json.getS_name());
                             sb.append("\n");
-                            sb.append("address:");
-                            sb.append(json.getS_address());
-                            sb.append("\n");
-                            sb.append("\n");
-                            sb.append(json.getS__longitude());
-                            sb.append(json.getS_latitude());
 
-                            helper.addrestaurant(json.getS_id(), json.getS_name(), json.getS_address(), json.getS_price(), json.getS__longitude(), json.getS_latitude(),json.getT_name());
+
+                            helper.addrestaurant(json.getS_id(), json.getS_name(), json.getS_address(), json.getS_price(), json.getS__longitude(), json.getS_latitude(),
+                                                String.valueOf(json.getT_name()).replace("[", "").replace("]",""), json.getS_phone(),json.getS_opentime(),json.getS_closetime(),
+                                                String.valueOf(json.getP_photes()).replace("[", "").replace("]",""));
                         }
                         //text.setText(sb.toString());
                     }

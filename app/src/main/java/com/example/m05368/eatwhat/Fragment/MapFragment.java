@@ -3,11 +3,10 @@ package com.example.m05368.eatwhat.Fragment;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -15,8 +14,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,24 +25,22 @@ import com.example.m05368.eatwhat.DBHelper;
 import com.example.m05368.eatwhat.DownloadImageTask;
 import com.example.m05368.eatwhat.R;
 
+import com.example.m05368.eatwhat.RestaurantInfo;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 
 public class MapFragment extends Fragment implements OnMapReadyCallback{
 
     private GoogleMap mMap;
     private static View view;
-    private SQLiteDatabase db;
-    private DBHelper helper;
+
 
     public MapFragment() {
         // Required empty public constructor
@@ -83,8 +82,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         price.setText(c.getString(3)+"元");
         address.setText(c.getString(2));
 
+
         new DownloadImageTask((ImageView) view.findViewById(R.id.photo))
-                .execute("http://10.11.24.95/eatwhat/image/爭鮮新LOGO-01.jpg");
+                .execute("http://10.11.24.95/eatwhat/image/%E7%88%AD%E9%AE%AE.jpg");
 
         return view;
     }
@@ -104,21 +104,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        SQLiteDatabase db = getActivity().openOrCreateDatabase("eatWhat_database", android.content.Context.MODE_PRIVATE, null);
+        final SQLiteDatabase db = getActivity().openOrCreateDatabase("eatWhat_database", android.content.Context.MODE_PRIVATE, null);
         DBHelper helper = new DBHelper(getActivity().getApplicationContext());
         Cursor c=db.query("restaurantGet",null,null,null,null,null,null);
-        String[] str = new String [c.getCount()];
-        String[] str1 = new String [c.getCount()];
-        String[] str2 = new String [c.getCount()];
+        final String[] S_name = new String [c.getCount()];
+        String[] S_longitude = new String [c.getCount()];
+        String[] S_latitude = new String [c.getCount()];
 
         for(int i = 0 ; i < c.getCount() ; i++) {
             c.moveToPosition(i);
-            str[i]= c.getString(1);
-            str1[i]= c.getString(4);
-            str2[i]= c.getString(5);
+            S_name[i]= c.getString(1);
+            S_longitude[i]= c.getString(4);
+            S_latitude[i]= c.getString(5);
 
-            LatLng test = new LatLng(Double.parseDouble(str2[i]), Double.parseDouble(str1[i]));
-            mMap.addMarker(new MarkerOptions().position(test).title(str[i]));
+            LatLng test = new LatLng(Double.parseDouble(S_latitude[i]), Double.parseDouble(S_longitude[i]));
+            mMap.addMarker(new MarkerOptions().position(test).title(S_name[i]).snippet("點擊獲取詳細資訊"));
         }
 
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
@@ -139,5 +139,32 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
 
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                TextView name = (TextView) view.findViewById(R.id.name);
+                TextView type = (TextView) view.findViewById(R.id.type);
+                TextView price = (TextView) view.findViewById(R.id.price);
+                TextView address = (TextView) view.findViewById(R.id.address);
+                Cursor c=db.rawQuery("SELECT * FROM restaurantGet WHERE S_name = ?",new String[]{marker.getTitle()});
+                c.moveToFirst();
+
+                name.setText(marker.getTitle());
+                type.setText(c.getString(6));
+                price.setText(c.getString(3)+"元");
+                address.setText(c.getString(2));
+
+                return false;
+            }
+        });
+
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                Intent intent = new Intent(getActivity(),RestaurantInfo.class);
+                intent.putExtra("name",marker.getTitle());
+                startActivity(intent);
+            } });
     }
 }

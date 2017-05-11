@@ -20,5 +20,6 @@
     </array>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_slot_result">Map</string>
+    <string name="title_activity_slot_restaurant">Map</string>
 
 </resources>
