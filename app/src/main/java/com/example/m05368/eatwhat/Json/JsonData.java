@@ -1,4 +1,4 @@
-package com.example.m05368.eatwhat;
+package com.example.m05368.eatwhat.Json;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -130,4 +130,5 @@ public class JsonData {
     public void setP_photes(){
         this.P_photes = P_photes;
     }
+
 }

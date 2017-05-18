@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -52,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(new DiaryFragment(), "美食日誌");
         adapter.addFragment(new FavoriteFragment(), "我的最愛");
         viewPager.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -83,8 +84,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void navigateFragment(int position){
-        viewPager.setCurrentItem(position, true);
 
-    }
 }

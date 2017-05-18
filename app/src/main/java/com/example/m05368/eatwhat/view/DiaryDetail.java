@@ -1,5 +1,6 @@
-package com.example.m05368.eatwhat;
+package com.example.m05368.eatwhat.view;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,6 +13,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,21 +22,29 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.m05368.eatwhat.Fragment.DiaryFragment;
+import com.example.m05368.eatwhat.DBHelper;
+import com.example.m05368.eatwhat.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 public class DiaryDetail extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private Button save,btn_camera,btn_gallery;
-    private TextView date,name;
+    private Button save;
+    private TextView date,name,camera,gallery;
     private EditText meal,price,comment;
     private Spinner score;
     private ImageView image;
@@ -68,7 +78,6 @@ public class DiaryDetail extends AppCompatActivity {
         Cursor c=db.rawQuery("SELECT * FROM diary WHERE _id = "+id,null);
         c.moveToFirst();
 
-
         date.setText(c.getString(1)+"/"+c.getString(2)+"/"+c.getString(3));
         name.setText(c.getString(4));
         meal.setText(c.getString(6));
@@ -82,10 +91,22 @@ public class DiaryDetail extends AppCompatActivity {
         scoreAdapter();
         score.setSelection(c.getInt(8));
 
-        saveOnClick();
-        cameraOnClick();
-        galleryOnClick();
 
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater inflater = LayoutInflater.from(DiaryDetail.this);
+                View addimage_dialog = inflater.inflate(R.layout.addimage_dialog, null );
+                final AlertDialog.Builder builder = new AlertDialog.Builder(DiaryDetail.this);
+                builder.setView(addimage_dialog)
+                        .show();
+                cameraOnClick(addimage_dialog);
+                galleryOnClick(addimage_dialog);
+            }
+        });
+
+
+        saveOnClick();
     }
 
 
@@ -112,20 +133,20 @@ public class DiaryDetail extends AppCompatActivity {
     private void saveOnClick() {
         save = (Button) findViewById(R.id.save);
         save.setOnClickListener(new Button.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-
                 helper.adddiaryinfo(id,meal.getText().toString(),price.getText().toString(),score_position,comment.getText().toString());
-                Toast.makeText(DiaryDetail.this,"儲存成功",Toast.LENGTH_SHORT);
+                if (comment.getText().length() != 0) {
+                    postAsynHttp(name.getText().toString(), comment.getText().toString());
+                }
                 finish();
             }
         });
     }
 
-    private void cameraOnClick(){
-        btn_camera = (Button) findViewById(R.id.btn_camera);
-        btn_camera.setOnClickListener(new Button.OnClickListener() {
+    private void cameraOnClick(View v){
+        camera = (TextView) v.findViewById(R.id.camera);
+        camera.setOnClickListener(new Button.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -137,9 +158,9 @@ public class DiaryDetail extends AppCompatActivity {
         });
     }
 
-    private void galleryOnClick(){
-        btn_gallery = (Button) findViewById(R.id.btn_gallery);
-        btn_gallery.setOnClickListener(new Button.OnClickListener() {
+    private void galleryOnClick(View v){
+        gallery = (TextView) v.findViewById(R.id.gallery);
+        gallery.setOnClickListener(new Button.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -180,6 +201,29 @@ public class DiaryDetail extends AppCompatActivity {
             }
         }
     }
+
+    private void postAsynHttp(String name , String Comment) {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody formBody = new FormBody.Builder()
+                .add("S_name", name)
+                .add("Comment",Comment)
+                .build();
+        Request request = new Request.Builder()
+                .url("http://10.11.24.95/eatwhat/api/addComments")
+                .post(formBody)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+            }
+        });
+    }
+
 }
 
 

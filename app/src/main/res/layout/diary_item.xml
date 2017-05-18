@@ -14,9 +14,9 @@
     <ImageView
         android:id="@+id/food"
         android:layout_width="60dp"
-        android:layout_height="70dp"
-        android:src="@drawable/food"
-        android:layout_marginTop="18dp"/>
+        android:layout_height="50dp"
+        android:layout_marginTop="28dp"
+        android:scaleType="fitXY"/>
 
     <TextView
         android:id="@+id/name"
@@ -38,6 +38,14 @@
         android:layout_below="@+id/name"
         android:layout_marginTop="55dp"
         android:layout_marginLeft="70dp"/>
+
+    <ImageView
+        android:id="@+id/delete"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/delete"
+        android:layout_marginTop="35dp"
+        android:layout_marginLeft="320dp"/>
 
 </FrameLayout>
 

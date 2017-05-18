@@ -29,6 +29,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private final static String S_OPENTIME = " S_opentime";
     private final static String S_CLOSETIME = " S_closetime";
     private final static String P_PHOTES = " P_photes";
+    private final static String S_COMMENT = " S_comment";
 
     private final static String SLOT_TABLE = "slot";
     private final static String SL_NAME = " SL_name";
@@ -45,6 +46,9 @@ public class DBHelper extends SQLiteOpenHelper {
     private final static String D_COMMENT = " D_comment";
     private final static String D_PICTURE = " D_picture";
 
+    private final static String TIME_TABLE = "time";
+    private final static String T_TIME = " T_time";
+
     private String sqlstore =
             "CREATE TABLE IF NOT EXISTS "+RESTAURANT_TABLE+"("+
                     _ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
@@ -57,7 +61,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     S_PHONE+" CHAR,"+
                     S_OPENTIME+" CHAR,"+
                     S_CLOSETIME+" CHAR,"+
-                    P_PHOTES+" CHAR"+
+                    P_PHOTES+" CHAR,"+
+                    S_COMMENT+" CHAR"+
                     ")";
 
     private String sqlslot =
@@ -69,16 +74,23 @@ public class DBHelper extends SQLiteOpenHelper {
     private String sqldiary =
             "CREATE TABLE IF NOT EXISTS "+DIARY_TABLE+"("+
                     _ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
-                    D_YEAR+" CHAR,"+
-                    D_MONTH+" CHAR,"+
-                    D_DAY+" CHAR,"+
+                    D_YEAR+" INTEGER,"+
+                    D_MONTH+" INTEGER,"+
+                    D_DAY+" INTEGER,"+
                     D_NAME+" CHAR,"+
                     D_ADDRESS+" CHAR,"+
                     D_MEAL+" CHAR,"+
                     D_PRICE+" CHAR,"+
                     D_SCORE+" INTEGER,"+
                     D_COMMENT+" CHAR,"+
-                    D_PICTURE+" BLOB"+
+                    D_PICTURE+" BLOB,"+
+                    P_PHOTES+" CHAR"+
+                    ")";
+
+    private String sqltime =
+            "CREATE TABLE IF NOT EXISTS "+TIME_TABLE+"("+
+                    _ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                    T_TIME+" CHAR"+
                     ")";
 
 
@@ -94,6 +106,9 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(sqlstore);
         db.execSQL(sqlslot);
         db.execSQL(sqldiary);
+        db.execSQL(sqltime);
+
+        db.execSQL("insert into time values (1,0)");
     }
 
     @Override
@@ -130,17 +145,18 @@ public class DBHelper extends SQLiteOpenHelper {
         database.insert("slot", null, values);
     }
 
-    public void addtodiary(String D_year, String D_month, String D_day, String D_name, String D_address){
+    public void addtodiary(int D_year, int D_month, int D_day, String D_name, String D_address, String P_photes){
         ContentValues values = new ContentValues();
         values.put("D_year", D_year);
         values.put("D_month", D_month);
         values.put("D_day", D_day);
         values.put("D_name", D_name);
         values.put("D_address", D_address);
+        values.put("P_photes",P_photes);
         database.insert("diary", null, values);
     }
 
-    public void adddiaryinfo(Integer id,String D_meal, String D_price, Integer D_score, String D_comment){
+    public void adddiaryinfo(int id,String D_meal, String D_price, int D_score, String D_comment){
         ContentValues values=new ContentValues();
         values.put("D_meal",D_meal);
         values.put("D_price",D_price);
@@ -148,6 +164,30 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put("D_comment",D_comment);
 
         database.update("diary",values,"_id="+ id ,null);
+    }
+
+    public void deletediary(int id){
+        database.delete("diary","_id="+ id ,null);
+    }
+
+    public void deletefavorite(int id ,int D_score){
+        ContentValues values=new ContentValues();
+        values.put("D_score",D_score);
+        database.update("diary",values,"_id="+ id ,null);
+    }
+
+    public void addcomment(int id, String S_comment){
+        ContentValues values=new ContentValues();
+        values.put("S_comment",S_comment);
+
+        database.update("restaurantGet",values,"_id="+ id ,null);
+    }
+
+    public void addtime(String T_time){
+        ContentValues values=new ContentValues();
+        values.put("T_time",T_time);
+
+        database.update("time",values,"_id= 1 " ,null);
     }
 
     public void close(){

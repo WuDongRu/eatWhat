@@ -39,7 +39,7 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".DiaryDetail"
+            android:name=".view.DiaryDetail"
             android:screenOrientation="portrait" />
 
         <!--
@@ -55,9 +55,9 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".SlotRestaurant"
+            android:name=".view.SlotRestaurant"
             android:label="eatWhat" />
-        <activity android:name=".RestaurantInfo"></activity>
+        <activity android:name=".view.RestaurantInfo"></activity>
     </application>
 
 </manifest>

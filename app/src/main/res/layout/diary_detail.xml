@@ -10,15 +10,34 @@
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/daily"
-            android:layout_width="match_parent"
+            android:id="@+id/diary"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:text="美 食 日 誌"
             android:textColor="#ffffff"
             android:gravity="center"
+            android:layout_marginLeft="10dp"
             android:textSize="25dp"/>
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/diary"
+            android:layout_marginLeft="180dp"
+            android:text="儲存"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            android:background="#FF8800" />
+
+    </RelativeLayout>
+
+
 
     </android.support.design.widget.AppBarLayout>
 
@@ -129,47 +148,19 @@
             android:layout_marginTop="178dp"
             android:layout_marginLeft="55dp"
             android:gravity="top"
-            android:text=""/>
+            android:text=" "/>
 
     </FrameLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-        <Button
-            android:id="@+id/btn_camera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="相機" />
-
-        <Button
-            android:id="@+id/btn_gallery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:text="圖片"/>
-
         <ImageView
             android:id="@+id/image"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_below="@id/btn_camera"
+            android:layout_width="200dp"
+            android:layout_height="180dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/food"
-            android:scaleType="centerCrop"
-            />
-
-        <Button
-            android:id="@+id/save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="儲存"
-            android:layout_toRightOf="@+id/image"
-            android:layout_alignParentBottom="true"/>
-
-    </RelativeLayout>
+            android:src="@drawable/addimage"
+            android:layout_marginTop="30dp"
+            android:scaleType="fitXY"
+            android:layout_gravity="center"/>
 
 
 </LinearLayout>

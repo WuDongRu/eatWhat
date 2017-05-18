@@ -1,4 +1,4 @@
-package com.example.m05368.eatwhat;
+package com.example.m05368.eatwhat.view;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.m05368.eatwhat.R;
 
 import java.util.ArrayList;
 
@@ -44,7 +46,9 @@ public class RestaurantInfo extends AppCompatActivity {
         arrayList.add(2,"時間 : "+(c.getString(8)).substring(0,5)+"-"+(c.getString(9)).substring(0,5));
         arrayList.add(3,"電話 : "+c.getString(7));
         arrayList.add(4,"地址 : "+c.getString(2));
-
+        if(c.getString(11)!=null) {
+            arrayList.add(5, "評論 :\n " + (c.getString(11)).replace(", ", "\n "));
+        }
 
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);

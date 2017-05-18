@@ -11,8 +11,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
 
+import com.example.m05368.eatwhat.Json.JsonData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -40,7 +40,6 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_layout);
-        TextView text = (TextView) findViewById(R.id.text);
         db = openOrCreateDatabase("eatWhat_database", android.content.Context.MODE_PRIVATE, null);
         helper = new DBHelper(getApplicationContext());
         helper.deleteAll();
@@ -48,7 +47,7 @@ public class WelcomeActivity extends AppCompatActivity {
         getAsynHttp();
         postAsynHttp();
 
-        mHandler.sendEmptyMessageDelayed(GOTO_MAIN_ACTIVITY, 5000); //2秒跳轉
+        mHandler.sendEmptyMessageDelayed(GOTO_MAIN_ACTIVITY, 5000); //5秒跳轉
     }
 
 
@@ -105,12 +104,10 @@ public class WelcomeActivity extends AppCompatActivity {
                                                 String.valueOf(json.getT_name()).replace("[", "").replace("]",""), json.getS_phone(),json.getS_opentime(),json.getS_closetime(),
                                                 String.valueOf(json.getP_photes()).replace("[", "").replace("]",""));
                         }
-                        //text.setText(sb.toString());
                     }
                 });
             }
         });
-
     }
 
     private void postAsynHttp() {

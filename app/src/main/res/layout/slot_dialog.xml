@@ -20,12 +20,13 @@
         android:layout_below="@+id/slot"/>
 
     <ImageView
-        android:id="@+id/food"
-        android:layout_width="120dp"
-        android:layout_height="140dp"
-        android:src="@drawable/food"
+        android:id="@+id/img"
+        android:layout_width="140dp"
+        android:layout_height="120dp"
         android:layout_below="@id/line"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:scaleType="fitXY"/>
 
     <TextView
         android:id="@+id/name"
@@ -34,13 +35,13 @@
         android:text="老吳魯肉飯"
         android:textSize="20dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/food"/>
+        android:layout_below="@+id/img"/>
 
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:text="您將在3小時後才能再次拉霸喔!"
+        android:text="您將在1小時後才能再次拉霸喔!"
         android:textSize="12sp"
         android:textColor="#FF0000"
         android:layout_centerHorizontal="true"

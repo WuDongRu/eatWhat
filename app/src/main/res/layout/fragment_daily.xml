@@ -5,7 +5,7 @@
     tools:context="com.example.m05368.eatwhat.Fragment.SlotFragment"
     android:background="#FFDDAA"
     android:orientation="vertical"
-    android:paddingBottom="50dp">
+    android:paddingBottom="55dp">
 
     <TextView
         android:id="@+id/month"

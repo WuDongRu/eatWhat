@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -23,9 +22,10 @@ import android.widget.TextView;
 
 import com.example.m05368.eatwhat.DBHelper;
 import com.example.m05368.eatwhat.DownloadImageTask;
+import com.example.m05368.eatwhat.Json.JsonComment;
 import com.example.m05368.eatwhat.R;
 
-import com.example.m05368.eatwhat.RestaurantInfo;
+import com.example.m05368.eatwhat.view.RestaurantInfo;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -33,13 +33,27 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
+import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class MapFragment extends Fragment implements OnMapReadyCallback{
 
     private GoogleMap mMap;
     private static View view;
+    private SQLiteDatabase db;
+    private DBHelper helper;
+    private FrameLayout frameLayout;
+    private TextView name,type,price,address;
 
 
     public MapFragment() {
@@ -55,6 +69,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         if (view != null) {
             ViewGroup viewGroupParent = (ViewGroup) view.getParent();
             if (viewGroupParent != null)
@@ -69,12 +84,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        TextView name = (TextView) view.findViewById(R.id.name);
-        TextView type = (TextView) view.findViewById(R.id.type);
-        TextView price = (TextView) view.findViewById(R.id.price);
-        TextView address = (TextView) view.findViewById(R.id.address);
+        name = (TextView) view.findViewById(R.id.name);
+        type = (TextView) view.findViewById(R.id.type);
+        price = (TextView) view.findViewById(R.id.price);
+        address = (TextView) view.findViewById(R.id.address);
 
-        SQLiteDatabase db = getActivity().openOrCreateDatabase("eatWhat_database", android.content.Context.MODE_PRIVATE, null);
+        db = getActivity().openOrCreateDatabase("eatWhat_database", android.content.Context.MODE_PRIVATE, null);
+        helper = new DBHelper(getActivity().getApplicationContext());
         Cursor c=db.query("restaurantGet",null,null,null,null,null,null);
         c.moveToPosition(1);
         name.setText(c.getString(1));
@@ -82,9 +98,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         price.setText(c.getString(3)+"元");
         address.setText(c.getString(2));
 
-
         new DownloadImageTask((ImageView) view.findViewById(R.id.photo))
                 .execute("http://10.11.24.95/eatwhat/image/%E7%88%AD%E9%AE%AE.jpg");
+
+
 
         return view;
     }
@@ -142,10 +159,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                TextView name = (TextView) view.findViewById(R.id.name);
-                TextView type = (TextView) view.findViewById(R.id.type);
-                TextView price = (TextView) view.findViewById(R.id.price);
-                TextView address = (TextView) view.findViewById(R.id.address);
+                getAsynHttp();
+                name = (TextView) view.findViewById(R.id.name);
+                type = (TextView) view.findViewById(R.id.type);
+                price = (TextView) view.findViewById(R.id.price);
+                address = (TextView) view.findViewById(R.id.address);
+                frameLayout = (FrameLayout) view.findViewById(R.id.frame_layout);
                 Cursor c=db.rawQuery("SELECT * FROM restaurantGet WHERE S_name = ?",new String[]{marker.getTitle()});
                 c.moveToFirst();
 
@@ -153,6 +172,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                 type.setText(c.getString(6));
                 price.setText(c.getString(3)+"元");
                 address.setText(c.getString(2));
+                new DownloadImageTask((ImageView) view.findViewById(R.id.photo))
+                        .execute(c.getString(10));
+
+                frameLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(),RestaurantInfo.class);
+                        intent.putExtra("name",String.valueOf(name.getText()));
+                        startActivity(intent);
+                    }
+                });
 
                 return false;
             }
@@ -162,9 +192,39 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
 
             @Override
             public void onInfoWindowClick(Marker marker) {
+                getAsynHttp();
                 Intent intent = new Intent(getActivity(),RestaurantInfo.class);
                 intent.putExtra("name",marker.getTitle());
                 startActivity(intent);
             } });
+    }
+
+    private void getAsynHttp() {
+
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("http://10.11.24.95/eatwhat/api/selectComment")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                final String resStr = response.body().string();
+                final List<JsonComment> jsonComment = new Gson().fromJson(resStr, new TypeToken<List<JsonComment>>() {
+                }.getType());
+                        StringBuffer sb = new StringBuffer();
+
+                        for (JsonComment json : jsonComment) {
+                            sb.append(json.getComment());
+                            sb.append("\n");
+
+                            helper.addcomment(json.getS_id(),String.valueOf(json.getComment()).replace("[", "").replace("]",""));
+                }
+            }
+        });
     }
 }

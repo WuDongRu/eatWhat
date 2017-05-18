@@ -1,4 +1,4 @@
-package com.example.m05368.eatwhat;
+package com.example.m05368.eatwhat.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +14,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 
+import com.example.m05368.eatwhat.DBHelper;
+import com.example.m05368.eatwhat.Json.JsonComment;
+import com.example.m05368.eatwhat.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -21,6 +24,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.IOException;
+import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class SlotRestaurant extends AppCompatActivity implements OnMapReadyCallback {
@@ -79,8 +93,8 @@ public class SlotRestaurant extends AppCompatActivity implements OnMapReadyCallb
         LatLng myLocation = new LatLng(latitude, longitude);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 16));
-        SQLiteDatabase db = this.openOrCreateDatabase("eatWhat_database", android.content.Context.MODE_PRIVATE, null);
-        DBHelper helper = new DBHelper(this.getApplicationContext());
+        SQLiteDatabase db = openOrCreateDatabase("eatWhat_database", android.content.Context.MODE_PRIVATE, null);
+        DBHelper helper = new DBHelper(getApplicationContext());
 
         Cursor c=db.rawQuery("SELECT * FROM restaurantGet WHERE S_name = ?",new String[]{name});
         c.moveToFirst();
@@ -96,10 +110,41 @@ public class SlotRestaurant extends AppCompatActivity implements OnMapReadyCallb
 
             @Override
             public void onInfoWindowClick(Marker marker) {
+                getAsynHttp();
                 Intent intent = new Intent(SlotRestaurant.this,RestaurantInfo.class);
                 intent.putExtra("name",name);
                 startActivity(intent);
             } });
+    }
+
+    private void getAsynHttp() {
+        SQLiteDatabase db = openOrCreateDatabase("eatWhat_database", android.content.Context.MODE_PRIVATE, null);
+        final DBHelper helper = new DBHelper(getApplicationContext());
+        OkHttpClient client = new OkHttpClient();
+        Request request2 = new Request.Builder()
+                .url("http://10.11.24.95/eatwhat/api/selectComment")
+                .build();
+        client.newCall(request2).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                final String resStr = response.body().string();
+                final List<JsonComment> jsonComment = new Gson().fromJson(resStr, new TypeToken<List<JsonComment>>() {
+                }.getType());
+                StringBuffer sb = new StringBuffer();
+
+                for (JsonComment json : jsonComment) {
+                    sb.append(json.getComment());
+                    sb.append("\n");
+
+                    helper.addcomment(json.getS_id(),String.valueOf(json.getComment()).replace("[", "").replace("]",""));
+                }
+            }
+        });
     }
 
 }

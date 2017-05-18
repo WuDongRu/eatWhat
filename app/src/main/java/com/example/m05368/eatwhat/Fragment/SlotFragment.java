@@ -14,17 +14,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.example.m05368.eatwhat.DBHelper;
+import com.example.m05368.eatwhat.DownloadImageTask;
 import com.example.m05368.eatwhat.R;
-import com.example.m05368.eatwhat.SlotRestaurant;
+import com.example.m05368.eatwhat.view.SlotRestaurant;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
-
+import java.util.Calendar;
 
 
 public class SlotFragment extends Fragment{
@@ -51,23 +52,19 @@ public class SlotFragment extends Fragment{
         final TextView time = (TextView) view.findViewById(R.id.time);
 
 
-        SQLiteDatabase db = getActivity().openOrCreateDatabase("eatWhat_database", android.content.Context.MODE_PRIVATE, null);
-        DBHelper helper = new DBHelper(getActivity().getApplicationContext());
+        final SQLiteDatabase db = getActivity().openOrCreateDatabase("eatWhat_database", android.content.Context.MODE_PRIVATE, null);
+
         Cursor c=db.query("slot",null,null,null,null,null,null);
         final String[] str = new String [c.getCount()] ;
         for(int i = 0 ; i < c.getCount() ; i++) {
         c.moveToPosition(i);
                 str[i]= c.getString(1);
             }
-        db.close();
-        helper.close();
-        //final String[] values = {"魯肉飯", "豬排飯", "拉麵", "鍋貼", "炒飯", "鍋燒麵"};
 
         picker.setMinValue(0);
         picker.setMaxValue(str.length - 1);
         picker.setDisplayedValues(str);
         picker.setWrapSelectorWheel(true);
-
         slot_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,6 +93,11 @@ public class SlotFragment extends Fragment{
                         builder.setView(slot_dialog);
                         final TextView name = (TextView) slot_dialog.findViewById(R.id.name);
                         name.setText(str[picker_position]);
+                        Cursor c=db.rawQuery("SELECT * FROM restaurantGet WHERE S_name = ?",new String[]{str[picker_position]});
+                        c.moveToFirst();
+                        new DownloadImageTask((ImageView) slot_dialog.findViewById(R.id.img))
+                                .execute(c.getString(10));
+
                         builder.setPositiveButton("Let's GO!", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 SQLiteDatabase db = getActivity().openOrCreateDatabase("eatWhat_database", android.content.Context.MODE_PRIVATE, null);
@@ -108,13 +110,11 @@ public class SlotFragment extends Fragment{
                                 Cursor c=db.rawQuery("SELECT * FROM restaurantGet WHERE S_name = ?",new String[]{str[picker_position]});
                                 c.moveToFirst();
 
-                                SimpleDateFormat sdfy=new SimpleDateFormat("yyyy");
-                                String year=sdfy.format(new java.util.Date());
-                                SimpleDateFormat sdfm=new SimpleDateFormat("MM");
-                                String month=sdfm.format(new java.util.Date());
-                                SimpleDateFormat sdfd=new SimpleDateFormat("dd");
-                                String day=sdfd.format(new java.util.Date());
-                                helper.addtodiary(year,month,day,str[picker_position],c.getString(2));
+                                Calendar calendar = Calendar.getInstance();
+                                int year = calendar.get(Calendar.YEAR);
+                                int month = calendar.get(Calendar.MONTH)+1;
+                                int day = calendar.get(Calendar.DATE);
+                                helper.addtodiary(year,month,day,str[picker_position],c.getString(2),c.getString(10));
 
                                 db.close();
                                 helper.close();
@@ -137,9 +137,7 @@ public class SlotFragment extends Fragment{
                     }
                 }, 500);
 
-
-
-                new CountDownTimer(5000, 1000) {
+                new CountDownTimer(10000, 1000) {
 
                     public void onTick(long millisUntilFinished) {
                         time.setText(""+millisUntilFinished / 1000);

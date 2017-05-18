@@ -2,19 +2,27 @@
     <string name="app_name">eatWhat</string>
 
     <string name="select_region_dialog_title">請選擇</string>
-    <string-array name="spn_list">
+    <string-array name="spn_category">
         <item>隨機</item>
-        <item>選項1</item>
-        <item>選項2</item>
-        <item>選項3</item>
-        <item>選項4</item>
-        <item>選項5</item>
+        <item>小吃類</item>
+        <item>速食類</item>
+        <item>便當類</item>
+        <item>日本料理類</item>
+        <item>火鍋類</item>
+    </string-array>
+
+    <string-array name="spn_price">
+        <item>隨機</item>
+        <item>50元以下</item>
+        <item>50~100元</item>
+        <item>100~150元</item>
+        <item>150~200元</item>
+        <item>200元以上</item>
     </string-array>
 
     <array name="score_array">
-        <item>我的最愛</item>
-        <item>喜歡</item>
         <item>普通</item>
+        <item>我的最愛</item>
         <item>黑名單</item>
 
     </array>
