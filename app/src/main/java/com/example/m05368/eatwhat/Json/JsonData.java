@@ -107,20 +107,20 @@ public class JsonData {
         this.S_phone = S_phone;
     }
 
-    public void setS_opentime(){
-        this.S_opentime = S_opentime;
-    }
-
     public String getS_opentime() {
         return S_opentime;
     }
 
-    public void setS_closetime(){
-        this.S_closetime = S_closetime;
+    public void setS_opentime(){
+        this.S_opentime = S_opentime;
     }
 
     public String getS_closetime() {
         return S_closetime;
+    }
+
+    public void setS_closetime(){
+        this.S_closetime = S_closetime;
     }
 
     public List getP_photes() {

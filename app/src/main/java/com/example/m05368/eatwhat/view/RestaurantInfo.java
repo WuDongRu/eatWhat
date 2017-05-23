@@ -57,12 +57,6 @@ public class RestaurantInfo extends AppCompatActivity {
 
         listAdapter = new ArrayAdapter<String>(this,R.layout.restaurant_item,arrayList);
         list_restaurant.setAdapter(listAdapter);
-        list_restaurant.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(),"you chose:"+arrayList.get(position),Toast.LENGTH_SHORT).show();
-            }
-        });
 
     }
 }
